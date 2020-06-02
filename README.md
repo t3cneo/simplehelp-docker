@@ -45,11 +45,12 @@ And you can now enjoy SimpleHelp Server in docker by visiting yoursub.yourdomain
 We love using traefik because we can safely close the ports on our remote server leaving only 80,443 and the custom ssh port open.
 We can only recomand you to do so as well!
 
-The easy and fast way :
+The easy and fast way (don't forget to put your actual ssh port, you'll lock yourself out otherwise) :
 
 ```
 apt-get install ufw
 ufw allow 80, 443, "yoursshport"
+ufw enable
 ```
 
 Following this way of setting up traefik, you'll have access log available in /var/log/traefik-access.log thus you could easily set up fail2ban rules to ban any failed login attempts to any traefik routed service.
