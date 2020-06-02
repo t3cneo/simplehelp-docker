@@ -1,0 +1,32 @@
+version: "3.2"
+
+services:
+#SimpleHelp Container
+  simplehelp:
+    image: tecneo/simplehelp
+    container_name : simplehelp
+    ports:
+      - "8680:80"
+      - "8681:80/udp"
+      - "8643:443"
+      - "8643:443/udp"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/appdata/simplehelp/configuration:/opt/SimpleHelp/configuration
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.simplehelp.rule=Host(`SUBDOMAIN.DOMAIN.EXT`)"
+      - "traefik.http.routers.simplehelp.entrypoints=web,websecure"
+      - "traefik.http.routers.simplehelp.tls.certresolver=myresolver"
+      - "traefik.http.services.simplehelp.loadbalancer.server.port=80"
+      - "traefik.udp.routers.simplehelp-udp.entrypoints=webudp"
+      - "traefik.udp.routers.simplehelp-udp.service=simplehelp"
+      - "traefik.udp.services.simplehelp.loadbalancer.server.port=80"
+    networks:
+      - frontbridge
+      
+networks:
+  frontbridge:
+    external: true
